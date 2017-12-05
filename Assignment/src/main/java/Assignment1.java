@@ -16,7 +16,7 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Testing {
+public class Assignment1 {
 
 
     private OkHttpClient client = new OkHttpClient();
@@ -51,7 +51,7 @@ public class Testing {
         url = url+ repo;
         //System.out.println(url+"--------------"+repo);
 
-        Testing example = new Testing();
+        Assignment1 example = new Assignment1();
         String rate="";
         try {
             rate = example.run(url);
@@ -80,7 +80,7 @@ public class Testing {
 
     private static  void importFunc(String ID) throws IOException, JSONException {
         String url1 = "https://api.github.com/repositories/" + ID;
-        Testing example = new Testing();
+        Assignment1 example = new Assignment1();
         //retrieving the fullname/repositoryname
 
         System.out.println(url1);
