@@ -16,7 +16,7 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Assignment1 {
+public class Testing {
 
 
     private OkHttpClient client = new OkHttpClient();
@@ -46,12 +46,12 @@ public class Assignment1 {
     }
 
 
-    private static void searchFunc(String repo) throws JSONException {
+    private static void searchFunc(String repo)  {
         String url = "https://api.github.com/search/repositories?q=";
         url = url+ repo;
         //System.out.println(url+"--------------"+repo);
 
-        Assignment1 example = new Assignment1();
+        Testing example = new Testing();
         String rate="";
         try {
             rate = example.run(url);
@@ -60,33 +60,43 @@ public class Assignment1 {
             e.printStackTrace();
         }
         //System.out.println(rate);
+        try{
+            JSONObject obj = new JSONObject(rate);
+            JSONArray allItems = obj.getJSONArray("items");
 
-        JSONObject obj = new JSONObject(rate);
+            for(int itr =0;itr< allItems.length(); itr++){
+                JSONObject itrObj = (JSONObject)allItems.get(itr);
+                String name = (String)itrObj.get("full_name");
+                name = name.split("/")[0];
+                System.out.printf("owner = %-20s repo name = %-20s star count = %-10s fork count = %-10s \n",name,itrObj.get("name"),itrObj.get("stargazers_count"),itrObj.get("forks"));
+            }
 
-        JSONArray allItems = obj.getJSONArray("items");
-
-        for(int itr =0;itr< allItems.length(); itr++){
-            JSONObject itrObj = (JSONObject)allItems.get(itr);
-            String name = (String)itrObj.get("full_name");
-            name = name.split("/")[0];
-
-            System.out.printf("owner = %-20s repo name = %-20s star count = %-10s fork count = %-10s \n",name,itrObj.get("name"),itrObj.get("stargazers_count"),itrObj.get("forks"));
-
+        }catch(JSONException e){
+            System.out.println(e);
         }
-        System.out.println("total: " + obj.get("total_count"));
 
     }
 
 
-    private static  void importFunc(String ID) throws IOException, JSONException {
+    private static  void importFunc(String ID)  {
         String url1 = "https://api.github.com/repositories/" + ID;
-        Assignment1 example = new Assignment1();
+        Testing example = new Testing();
         //retrieving the fullname/repositoryname
 
         System.out.println(url1);
-        String repoDetails = example.run(url1);
+        String repoDetails= "";
+        try{
+         repoDetails = example.run(url1);
+        }catch (IOException e){
+            System.out.println(e);
+        }
+        try{
         JSONObject obj = new JSONObject(repoDetails);
         repoDetails = (String) obj.get("full_name");
+        } catch(JSONException e){
+            System.out.println(e);
+        }
+
 
         //repoDetails = repoDetails.split("\"full_name\":")[1].split(",")[0].split("\"")[1].split("\"")[0];
         System.out.println(repoDetails);
@@ -95,33 +105,37 @@ public class Assignment1 {
 
 
         String url = "https://raw.githubusercontent.com/" + repoDetails + "/master/package.json";
-        String rate = example.run(url);
+        String rate ="";
+        try{
+            rate = example.run(url);
+        }catch (IOException e){
+            System.out.println(e);
+        }
+
         System.out.println(url);
 
         if (!rate.equals("404: Not Found\n")) {
-            List<String> packages = new ArrayList<>();
-            JSONObject packageObj = new JSONObject(rate);
-            JSONObject packagesJSON = packageObj.getJSONObject("dependencies");
-            Iterator keys = packagesJSON.keys();
-
-
-            //Iterator a = keys.iterator();
-            while(keys.hasNext()) {
-                String key = (String)keys.next();
-                packages.add(key);
-                // loop to get the dynamic key
-                String value = (String)packagesJSON.get(key);
-                System.out.printf("key = %-25s value = %-25s \n",key,value);
-            }
-
-
-
-            //System.out.println("+++++"+packagesJSON+"+++++++");
-
             StringBuilder allPackages = new StringBuilder();
-            for (String installed_package : packages) {
-                allPackages.append(installed_package).append(",");
+            List<String> packages = new ArrayList<>();
+            try {
+                JSONObject packageObj = new JSONObject(rate);
+                JSONObject packagesJSON = packageObj.getJSONObject("dependencies");
+
+                Iterator keys = packagesJSON.keys();
+                //Iterator a = keys.iterator();
+                while(keys.hasNext()) {
+                    String key = (String)keys.next();
+                    packages.add(key);
+                    // loop to get the dynamic key
+                    String value = (String)packagesJSON.get(key);
+                    System.out.printf("key = %-25s value = %-25s \n",key,value);
+                    allPackages.append(key).append(",");
+                }
+
+            }catch(JSONException e){
+                System.out.println(e);
             }
+
             allPackages = new StringBuilder(allPackages.substring(0, allPackages.length() - 2));
 
 
@@ -192,7 +206,7 @@ public class Assignment1 {
         }
     }
 
-    public static void main(String[] args) throws IOException, JSONException {
+    public static void main(String[] args) {
         while(true) {
             System.out.println("\n\nHi there\n Select 1 for Searching \n Select 2 for importing \n Select 3 for Toppacks \n Select 4 to Exit");
 
@@ -224,3 +238,4 @@ public class Assignment1 {
 
 
 //7796523
+//9852918
