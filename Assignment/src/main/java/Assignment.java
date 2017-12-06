@@ -157,7 +157,7 @@ public class Assignment {
 
     System.out.println(url);
 
-    if (!rate.equals("404: Not Found\n")) {
+    if (!rate.equals("404: Not Found\n") && !rate.equals("403: Forbidden\n") && !rate.equals("401: Unauthorized\n")) {
       StringBuilder allPackages = new StringBuilder();
       List<String> packages = new ArrayList<>();
       try {
