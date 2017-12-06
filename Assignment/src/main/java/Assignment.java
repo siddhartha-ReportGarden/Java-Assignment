@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Testing {
+public class Assignment {
 
 
   private OkHttpClient client = new OkHttpClient();
@@ -37,7 +37,7 @@ public class Testing {
     url = url + repo;
     //System.out.println(url+"--------------"+repo);
 
-    Testing example = new Testing();
+    Assignment example = new Assignment();
     String rate = "";
     try {
       rate = example.run(url);
@@ -65,7 +65,7 @@ public class Testing {
 
   private static void importFunc(String id) {
     String url1 = "https://api.github.com/repositories/" + id;
-    Testing example = new Testing();
+    Assignment example = new Assignment();
     //retrieving the fullname/repositoryname
 
     System.out.println(url1);
